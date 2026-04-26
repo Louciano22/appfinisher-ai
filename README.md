@@ -22,6 +22,7 @@ fixes, re-scan, and verify progress.
 ## Run Locally
 
 ```bash
+npm install
 npm run dev
 ```
 
