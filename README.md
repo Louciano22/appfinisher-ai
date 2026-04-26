@@ -31,7 +31,6 @@ Open `http://localhost:3000`.
 Use the app commands from the project directory:
 
 ```bash
-cd appfinisher-ai
 npm run lint
 npm run build
 ```
