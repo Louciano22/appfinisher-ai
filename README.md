@@ -36,7 +36,7 @@ npm run lint
 npm run build
 ```
 
-## Implemented Demo Routes
+## Implemented Routes
 
 - `/` public landing page
 - `/dashboard` mock launch dashboard
