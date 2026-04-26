@@ -66,11 +66,22 @@ Implemented:
 - Markdown Reports and mock re-scan verification loop
 - Supabase schema/RLS/function SQL scaffold
 
-Checks currently cover product readiness, auth/onboarding, billing/Stripe,
-database/RLS safety, security risks, AI route cost controls, deployment readiness,
-observability, legal/trust pages, customer success readiness, duplicate/conflicting
-files, bug-prone generated code patterns, missing env vars, and support/onboarding
-gaps.
+Checks currently cover:
+
+- product readiness
+- auth and onboarding
+- billing and Stripe
+- database and RLS safety
+- security risks
+- AI route cost controls
+- deployment readiness
+- observability
+- legal and trust pages
+- customer success readiness
+- duplicate/conflicting files
+- bug-prone generated code patterns
+- missing env vars
+- support and onboarding gaps
 
 Not implemented yet:
 
