@@ -38,7 +38,7 @@ export function normalizePromptPackInput(input: PromptPackInput): NormalizedProm
         : ["Inspect the listed files.", "Apply the smallest safe fix.", "Run build/typecheck if available."],
     recommendedContext:
       input.recommendedContext ??
-      "This prompt is generated from deterministic AppFinisher scan evidence. Review findings before production.",
+      "This prompt is generated from deterministic Sandpaper scan evidence. Review findings before production.",
   };
 }
 

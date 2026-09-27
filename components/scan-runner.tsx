@@ -32,7 +32,7 @@ export function ScanRunner() {
     <div className="space-y-8">
       <PageHeader
         title="Project Scan"
-        subtitle="Run the first deterministic mocked ShipGuard Engine scan against Demo SaaS App. This uses path and content-preview heuristics only."
+        subtitle="Run the first deterministic mocked Sandpaper Engine scan against Demo SaaS App. This uses path and content-preview heuristics only."
         action={
           <button
             type="button"
@@ -98,7 +98,7 @@ function ScanResults({ result }: { result: ScanResult }) {
           />
           <div className="space-y-3">
             <p className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm leading-6 text-zinc-400">
-              Raw ShipGuard score: {result.overallScore}%. Guarded launch score: {launchPlan.launchScore}%.
+              Raw Sandpaper score: {result.overallScore}%. Guarded launch score: {launchPlan.launchScore}%.
             </p>
             {launchPlan.consistencyNotes.map((note) => (
               <p key={note} className="rounded-xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm leading-6 text-amber-100">
@@ -248,7 +248,7 @@ function EmptyScanState() {
       <div className="rounded-xl border border-dashed border-white/15 bg-white/[0.02] p-8 text-center">
         <p className="font-medium text-white">Mock scan ready</p>
         <p className="mx-auto mt-2 max-w-2xl text-sm leading-6 text-zinc-500">
-          Click Run Mock Scan to execute ShipGuard Engine v1 against a deterministic FileTree.
+          Click Run Mock Scan to execute Sandpaper Engine v1 against a deterministic FileTree.
           The result will show category scores, launch readiness issues, bugs, and duplicate groups.
         </p>
       </div>

@@ -4,11 +4,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "AppFinisher AI",
-    template: "%s | AppFinisher AI",
+    default: "Sandpaper",
+    template: "%s | Sandpaper",
   },
   description:
-    "Deterministic launch-completion demo for identifying SaaS launch risks, prioritizing fixes, and generating builder-ready prompts.",
+    "Application completion and release readiness for AI-built software. AI built it. Sandpaper proves it's ready.",
 };
 
 export default function RootLayout({

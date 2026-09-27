@@ -127,7 +127,7 @@ function NewProjectContent() {
         items={[
           "Connect repository or upload app bundle",
           "Store project metadata in Supabase",
-          "Start first ShipGuard Engine scan",
+          "Start first Sandpaper Engine scan",
         ]}
       />
     </div>

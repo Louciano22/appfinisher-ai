@@ -86,7 +86,7 @@ ${criticalBlockers(input)}
 ${severitySection(input)}
 
 ## Why It Matters
-AppFinisher AI reports focus on launch blockers that can prevent users from signing up, paying, using the product safely, or trusting the app in production.
+Sandpaper reports focus on launch blockers that can prevent users from signing up, paying, using the product safely, or trusting the app in production.
 
 ## Recommended Fix Order
 ${getReportRecommendedFixOrder(input).map((item, index) => `${index + 1}. ${item}`).join("\n")}

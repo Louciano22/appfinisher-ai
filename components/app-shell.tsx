@@ -37,11 +37,11 @@ function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         <Link href="/" onClick={onNavigate} className="group block">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-sky-300/30 bg-blue-500/15 font-mono text-sm font-semibold text-sky-100 shadow-sm shadow-blue-950/40">
-              AF
+              SP
             </div>
             <div>
-              <p className="font-semibold tracking-tight text-white">AppFinisher AI</p>
-              <p className="text-xs text-zinc-500">ShipGuard Engine</p>
+              <p className="font-semibold tracking-tight text-white">Sandpaper</p>
+              <p className="text-xs text-zinc-500">Release readiness</p>
             </div>
           </div>
         </Link>

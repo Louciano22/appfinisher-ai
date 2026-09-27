@@ -1,6 +1,6 @@
-# AppFinisher AI Agent Principles
+# Sandpaper Agent Principles
 
-These principles guide the documentation and generated prompt language for ShipGuard Engine. They are intentionally simple so builders can apply fixes in Cursor, Lovable, Claude Code, Replit, Bolt, and similar tools without creating unrelated churn.
+These principles guide the documentation and generated prompt language for the Sandpaper Engine. They are intentionally simple so builders can apply fixes in Cursor, Lovable, Claude Code, Replit, Bolt, and similar tools without creating unrelated churn.
 
 ## 1. Think Before Coding
 

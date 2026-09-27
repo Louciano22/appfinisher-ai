@@ -45,7 +45,7 @@ export function PromptPacks() {
     <div className="space-y-8">
       <PageHeader
         title="Prompt Packs"
-        subtitle="Generate deterministic, builder-ready prompts from structured AppFinisher issue data. No LLM calls or external providers are used."
+        subtitle="Generate deterministic, builder-ready prompts from structured Sandpaper issue data. No LLM calls or external providers are used."
         action={<StatusBadge status={{ label: "Template Generated", icon: "*", tone: "accent" }} />}
       />
 

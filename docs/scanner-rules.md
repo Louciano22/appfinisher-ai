@@ -2,7 +2,7 @@
 
 ## Current Engine
 
-ShipGuard Engine v1 lives in `lib/shipguard-engine`.
+Sandpaper Engine v1 lives in the legacy-compatible `lib/shipguard-engine` module.
 
 It uses deterministic heuristics only:
 

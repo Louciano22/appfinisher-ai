@@ -169,7 +169,7 @@ export const launchOsIdeas: LaunchOsIdea[] = [
   },
   {
     id: "appfinisher-score-badge",
-    title: "AppFinisher Score Badge",
+    title: "Sandpaper Score Badge",
     status: "Live Demo",
     category: "trust",
     wowMoment: "Users get a shareable repo badge that makes launch readiness visible.",

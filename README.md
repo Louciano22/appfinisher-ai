@@ -1,6 +1,8 @@
-# AppFinisher AI
+# Sandpaper
 
-AppFinisher AI is a launch-completion system for unfinished AI-built SaaS apps.
+> Sandpaper is the new name for AppFinisher AI. The repository history and compatibility-sensitive internal engine paths are preserved during the transition.
+
+Sandpaper is application completion and release readiness for AI-built software.
 It helps founders and AI-builder users identify launch blockers, prioritize fixes,
 and generate builder-ready prompts for tools like Cursor, Lovable, Claude Code,
 Replit, Bolt, and Windsurf.
@@ -15,7 +17,7 @@ fixes, re-scan, and verify progress.
 - Next.js App Router
 - TypeScript
 - Tailwind CSS
-- Mock ShipGuard Engine
+- Mock Sandpaper Engine (legacy internal module: `shipguard-engine`)
 - Deterministic PromptPack generator
 - Supabase SQL scaffold only
 
@@ -54,9 +56,9 @@ npm run build
 
 Implemented:
 
-- App shell, dashboard, and marketing landing page
+- Sandpaper app shell, dashboard, and marketing landing page
 - Mock project model and scan data
-- ShipGuard Engine v1 with deterministic file-tree heuristics
+- Sandpaper Engine v1 with deterministic file-tree heuristics
 - Bug Finder and Duplicate Finder mock workflows
 - PromptPack template generator
 - Launch Plan generator

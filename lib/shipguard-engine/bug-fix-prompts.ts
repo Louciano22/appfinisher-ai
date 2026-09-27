@@ -2,7 +2,7 @@ import { bugTypeLabels } from "@/lib/mock/bug-finder";
 import type { EngineBugFinding } from "@/lib/shipguard-engine/types";
 
 export function generateBugFixPrompt(bug: EngineBugFinding) {
-  return `You are fixing a launch-blocking bug in AppFinisher AI's target SaaS app.
+  return `You are fixing a launch-blocking bug in Sandpaper's target SaaS app.
 
 Agent Rules:
 1. Think before coding

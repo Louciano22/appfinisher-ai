@@ -323,7 +323,7 @@ function createPhasePromptInput(phase: FixOrderPhase, targetTool: BuilderTarget)
       "Stop before starting the next phase.",
     ],
     recommendedContext:
-      "AppFinisher AI generated this phase prompt from a deterministic launch plan, not from an LLM call.",
+      "Sandpaper generated this phase prompt from a deterministic launch plan, not from an LLM call.",
   };
 }
 
@@ -392,7 +392,7 @@ function TextModal({
         <div className="flex flex-col gap-4 border-b border-white/10 p-5 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-300">
-              AppFinisher AI
+              Sandpaper
             </p>
             <h2 className="mt-2 text-xl font-semibold text-white">{title}</h2>
             <p className="mt-1 text-sm text-zinc-500">{subtitle}</p>
