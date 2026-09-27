@@ -12,7 +12,19 @@ It uses deterministic heuristics only:
 - `contentPreview` substring checks.
 - Common config file presence.
 
-It does not parse real repositories, walk the filesystem, parse ASTs, or call external services.
+The browser scanner does not parse real repositories, walk the filesystem, parse ASTs, or call external services.
+
+## Local observation (CLI only)
+
+From a terminal on a machine containing an authorized checkout:
+
+```bash
+npm run evidence:local -- --root /absolute/path/to/authorized/repo --project-id my-project --billing-provider stripe
+```
+
+This read-only command emits a `sandpaper.local-collection/v1` JSON receipt to stdout. It does not install dependencies, execute source, run a build, call a network service, write files, or read environment values. The root is explicit and absolute; symlinked roots, symlinked entries, nonregular entries, unsafe paths, and exceeded traversal, depth, file, or package byte limits fail collection. Common generated directories and sensitive filenames are excluded. Only root `package.json` scripts and dependency metadata are parsed, under a byte limit; the receipt includes the hash of the exact package bytes parsed, never package content or source excerpts. The collector does not read source files or `.env` files.
+
+The separate local receipt records a root fingerprint, file count, skipped counts, package hash, manifest fingerprint, and conservative gate results. The root path is not printed. Coverage remains **partial** because generated and sensitive entries are excluded; no absence-dependent check is promoted to pass. The receipt explicitly states `runtimeVerification: not_performed`. Browser manifest receipts retain their `sandpaper.evidence/v2` contract and cannot be mistaken for this local provenance. The underlying path listing and JSON observations are static, not proof that a build runs, Stripe verification works, or a repository is safe. Filesystem races and hostile concurrently mutating checkouts require a stronger sandboxed collection protocol in a future version.
 
 ## Evidence Receipts
 
