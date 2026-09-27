@@ -28,6 +28,8 @@ The separate local receipt records a root fingerprint, file count, skipped count
 
 ## Evidence Receipts
 
+The New Project screen can import a local receipt JSON file for a separate, in-memory review. The browser caps file size at 128 KB and gate evidence at 100 entries per gate, checks the known `sandpaper.local-collection/v1` shape, gate set, status constraints, and summary counts, and displays only a curated subset. Very large but valid CLI receipts may exceed the review limits and will be rejected without a partial import. It does not read a repository, upload the file, run a scan, compare it with manifest receipts, or change launch scoring. A syntactically valid imported receipt can still be forged or replayed: its claimed collector origin, project identity, fingerprints, timestamp, and observations are **not authenticated or independently verified**. Treat it as historical, user-supplied information. Rerun the CLI and import a fresh receipt when the local folder changes.
+
 Manifest scans also produce a `sandpaper.evidence/v2` receipt for four narrow checks:
 
 - production build command;

@@ -25,6 +25,7 @@ import {
   type PromptPackOutput,
 } from "@/lib/promptpack";
 import type { BillingProvider, BuilderTarget, DeploymentProvider } from "@/lib/types";
+import { MAX_LOCAL_RECEIPT_BYTES, parseLocalReceiptJson, type LocalReceiptReview } from "@/lib/shipguard-engine/local-receipt-import";
 
 type InputMethod = "manual" | "file-tree" | "manifest";
 
@@ -170,6 +171,8 @@ export function NewProjectWizard() {
         subtitle="Create a project with manual setup, pasted file tree, or manifest JSON. No GitHub OAuth, ZIP upload, or private code ingestion is used."
       />
 
+      <LocalReceiptImport />
+      <h2 className="border-t border-white/10 pt-6 text-lg font-semibold text-white">Manifest scan workflow</h2>
       <StepNav step={step} setStep={setStep} />
 
       {scanError ? (
@@ -249,6 +252,95 @@ export function NewProjectWizard() {
       </div>
     </div>
   );
+}
+
+function LocalReceiptImport() {
+  const [receipt, setReceipt] = useState<LocalReceiptReview | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  async function importFile(file: File | undefined) {
+    if (!file) return;
+    setReceipt(null);
+    setError(null);
+    if (!file.name.toLowerCase().endsWith(".json") || file.size > MAX_LOCAL_RECEIPT_BYTES) {
+      setError("Choose a JSON receipt smaller than 128 KB.");
+      return;
+    }
+    try {
+      const parsed = parseLocalReceiptJson(await file.text());
+      setReceipt(parsed);
+    } catch {
+      setError("This JSON is not a supported Sandpaper local receipt. Check the CLI output and select its complete JSON receipt.");
+    }
+  }
+
+  return (
+    <Card>
+      <SectionTitle title="Separate local CLI receipt review" subtitle="Import local receipt to review observations collected by Sandpaper’s CLI. This does not upload or rescan your repository." />
+      <p id="local-receipt-help" className="mb-3 text-sm leading-6 text-zinc-400">
+        Select the JSON output of <code>npm run evidence:local</code>. It is reviewed in this browser session only, separately from the manifest scan and launch score.
+      </p>
+      <label htmlFor="local-receipt-file" className="block text-sm font-semibold text-zinc-200">Local receipt JSON</label>
+      <input
+        id="local-receipt-file"
+        type="file"
+        accept="application/json,.json"
+        aria-describedby={error ? "local-receipt-help local-receipt-error" : "local-receipt-help"}
+        aria-invalid={Boolean(error)}
+        onChange={(event) => { void importFile(event.target.files?.[0]); event.target.value = ""; }}
+        className="mt-2 block w-full text-sm text-zinc-400 file:mr-4 file:rounded-xl file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white"
+      />
+      {error ? <p id="local-receipt-error" role="alert" className="mt-3 rounded-xl border border-red-400/20 bg-red-400/10 p-3 text-sm text-red-100">{error}</p> : null}
+      {receipt ? (
+        <div className="mt-5 space-y-4">
+          <p role="status" className="text-sm text-sky-100">Receipt schema recognized from the selected JSON file. Select another file to import a newer receipt.</p>
+          <div className="rounded-xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm leading-6 text-amber-100">
+            Imported JSON is untrusted: its claimed collector origin, project identity, timestamp, and fingerprints are not authenticated here. The reported observation is bounded and static. It does not prove the app builds, runs, is secure, or is ready to launch.
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <StackRow label="Contract" value="sandpaper.local-collection/v1" />
+            <StackRow label="Recorded project ID" value={receipt.projectId} />
+            <StackRow label="Paths" value="Partial" />
+            <StackRow label="Content" value={receipt.coverage.content === "package_metadata_only" ? "Package metadata only" : "None"} />
+            <StackRow label="Listed files" value={String(receipt.collection.listedFiles)} />
+            <StackRow label="Excluded entries" value={String(receipt.collection.skippedEntries)} />
+            <StackRow label="Sensitive files skipped" value={String(receipt.collection.skippedSensitiveFiles)} />
+            <StackRow label="Package metadata" value={receipt.collection.packageMetadata} />
+          </div>
+          <p className="text-sm text-zinc-300">Recorded at: <time dateTime={receipt.observedAt}>{receipt.observedAt}</time> · Runtime verification: <strong className="text-amber-100">Not performed</strong></p>
+          <p className="text-xs text-zinc-500">Observed manifest fingerprint: {receipt.manifestFingerprint.slice(0, 12)}… (self-reported; no integrity verification)</p>
+          <div>
+            <p className="mb-3 text-sm font-semibold text-white">Receipt findings · {receipt.summary.passed} Pass · {receipt.summary.failed} Fail · {receipt.summary.unknown} Unknown · {receipt.summary.notApplicable} Not applicable</p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {receipt.gates.map((gate) => (
+                <div key={gate.gateId} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                  <p className="font-medium text-white">{gate.title}</p>
+                  <p className="mt-2 text-sm text-zinc-300">{evidenceStatusLabel(gate.status)}</p>
+                  <p className="mt-2 text-sm leading-6 text-zinc-400">{localGateExplanation(gate.gateId, gate.status)}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <p className="text-xs leading-5 text-zinc-500">Unknown is never a pass. This imported receipt does not change manifest findings, launch status, score, or prompt packs. Rerun the local CLI and import a newer JSON receipt to review a new observation.</p>
+        </div>
+      ) : null}
+    </Card>
+  );
+}
+
+function localGateExplanation(gateId: LocalReceiptReview["gates"][number]["gateId"], status: LocalReceiptReview["gates"][number]["status"]): string {
+  if (gateId === "production-build-command") {
+    if (status === "pass") return "Root package metadata declares a non-empty build command; execution was not checked.";
+    if (status === "fail") return "Root package metadata was parsed but no non-empty build command was declared.";
+    return "Root package metadata was not parsed, so the build command is unknown.";
+  }
+  if (gateId === "single-package-manager") {
+    return status === "fail" ? "Multiple package manager lockfiles were reported in the observed paths." : "Partial path coverage cannot establish that only one lockfile exists.";
+  }
+  if (gateId === "stripe-webhook-signature") {
+    return status === "not_applicable" ? "The configured billing provider and observed paths did not indicate Stripe." : "Static observations cannot establish that webhook signature verification executes correctly.";
+  }
+  return status === "fail" ? "Conflicting App Router and Pages Router owners were reported in the observed paths." : "Partial path coverage cannot establish that no conflicting route owner exists.";
 }
 
 function StepNav({ step, setStep }: { step: number; setStep: (step: number) => void }) {
