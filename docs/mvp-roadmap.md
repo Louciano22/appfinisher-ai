@@ -4,7 +4,7 @@
 
 - Marketing landing page.
 - Mock app shell and dashboard.
-- Deterministic ShipGuard Engine v1.
+- Deterministic Sandpaper Engine v1.
 - Mock Bug Finder.
 - Mock Duplicate Finder.
 - Deterministic PromptPack generation.
@@ -21,7 +21,7 @@
 2. Add auth for user-owned projects.
 3. Persist local intake projects and their generated prompt packs.
 4. Persist scan results.
-5. Expand ShipGuard rules for common Next.js/Supabase/Stripe patterns.
+5. Expand Sandpaper rules for common Next.js/Supabase/Stripe patterns.
 6. Add GitHub import after local/paste flows are stable.
 7. Add Stripe billing after the free scan workflow is useful.
 

@@ -36,7 +36,7 @@ export function LaunchOs() {
   const [mode, setMode] = useState<"founder" | "engineer">("founder");
   const passedGates = launchRoomGates.filter((gate) => gate.passed).length;
   const badgeMarkdown = useMemo(
-    () => "![AppFinisher Launch Readiness](https://img.shields.io/badge/AppFinisher-89%25%20Almost%20Ready-blue)",
+    () => "![Sandpaper Launch Readiness](https://img.shields.io/badge/Sandpaper-89%25%20Almost%20Ready-blue)",
     [],
   );
 
@@ -44,7 +44,7 @@ export function LaunchOs() {
     <div className="space-y-8">
       <PageHeader
         title="Launch OS"
-        subtitle="The premium command-center vision for AppFinisher AI, where readiness, fixes, prompts, risk analysis, and final launch verification come together in one place."
+        subtitle="The premium command-center vision for Sandpaper, where readiness, fixes, prompts, risk analysis, and final launch verification come together in one place."
       />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -299,10 +299,10 @@ function LaunchRoomPanel() {
 function ScoreBadgePanel({ markdown }: { markdown: string }) {
   return (
     <Card>
-      <SectionTitle title="AppFinisher Score Badge" subtitle="A shareable repo badge concept for launch readiness." />
+      <SectionTitle title="Sandpaper Score Badge" subtitle="A shareable repo badge concept for launch readiness." />
       <div className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="rounded-xl border border-sky-300/30 bg-blue-500/15 p-5">
-          <p className="text-sm text-sky-100">AppFinisher Launch Readiness</p>
+          <p className="text-sm text-sky-100">Sandpaper Launch Readiness</p>
           <p className="mt-3 font-mono text-4xl font-semibold text-white">89%</p>
           <p className="mt-2 text-sm text-zinc-300">Almost Ready</p>
         </div>

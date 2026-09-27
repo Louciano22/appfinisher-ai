@@ -52,5 +52,5 @@ Reports are generated as markdown from mock scan data. PDF/docx export and real 
 
 The Launch OS page presents the readiness model as a command center: timeline,
 risk heatmap, fix order, prompt bundles, specialist auditors, final launch gates,
-and a score badge. It is the premium command-center vision for AppFinisher AI.
+and a score badge. It is the premium command-center vision for Sandpaper.
 It is deterministic today and designed to be wired to real scan history later.

@@ -22,7 +22,7 @@ export function Dashboard() {
     <div className="space-y-8">
       <PageHeader
         title="Finish AI-built apps with launch discipline"
-        subtitle="AppFinisher AI is a deterministic launch-completion demo that helps identify detected risks, prioritize recommended fixes, and generate builder-ready prompts before production review."
+        subtitle="Sandpaper is a deterministic launch-completion demo that helps identify detected risks, prioritize recommended fixes, and generate builder-ready prompts before production review."
         action={
           <div className="flex flex-col gap-2 sm:flex-row">
             <Link
@@ -64,7 +64,7 @@ export function Dashboard() {
             <div>
               <p className="font-medium text-white">No live scan running</p>
               <p className="mt-1 text-sm text-zinc-500">
-                Use Project Scan to run the mocked ShipGuard Engine.
+                Use Project Scan to run the mocked Sandpaper Engine.
               </p>
             </div>
             <StatusBadge status={{ label: "Idle", icon: "-", tone: "blue" }} />
@@ -125,7 +125,7 @@ export function Dashboard() {
         <Card>
           <SectionTitle
             title="Recent scans"
-            subtitle="Current evidence from deterministic ShipGuard checks; review before production."
+            subtitle="Current evidence from deterministic Sandpaper checks; review before production."
           />
           <div className="overflow-hidden rounded-xl border border-white/10">
             <table className="w-full min-w-[680px] text-left text-sm">

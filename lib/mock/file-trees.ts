@@ -89,7 +89,7 @@ export const demoSaasFileTree: FileTree = {
         {
           path: "app/support/page.tsx",
           type: "file",
-          contentPreview: "Contact support at support@appfinisher.test with cancellation questions.",
+          contentPreview: "Contact support at support@sandpaper.test with cancellation questions.",
         },
         {
           path: "app/privacy/page.tsx",

@@ -92,7 +92,7 @@ export function Reports() {
           "Confirm the route is no longer public.",
         ],
         recommendedContext:
-          "AppFinisher AI generated this prompt from the mock re-scan verification loop.",
+          "Sandpaper generated this prompt from the mock re-scan verification loop.",
       }),
     );
     setCopied(false);
@@ -203,7 +203,7 @@ export function Reports() {
           secondaryLabel="Download .md"
           onPrimary={() => copyText(activeText.text)}
           onSecondary={() =>
-            downloadMarkdown(activeText.text, activeText.filename ?? "appfinisher-report.md")
+            downloadMarkdown(activeText.text, activeText.filename ?? "sandpaper-report.md")
           }
           onClose={() => {
             setActiveText(null);
@@ -303,7 +303,7 @@ function TextModal({
         <div className="flex flex-col gap-4 border-b border-white/10 p-5 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-300">
-              AppFinisher AI Report
+              Sandpaper Report
             </p>
             <h2 className="mt-2 text-xl font-semibold text-white">{title}</h2>
             <p className="mt-1 text-sm text-zinc-500">{subtitle}</p>

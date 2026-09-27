@@ -17,7 +17,7 @@ export function generatePromptPack(input: PromptPackInput): PromptPackOutput {
   const severityLine = normalized.severity ? `\nSeverity: ${normalized.severity}` : "";
   const context = normalized.recommendedContext
     ? normalized.recommendedContext
-    : `This is a deterministic AppFinisher AI PromptPack for a ${issueTypeLabels[input.issueType].toLowerCase()}.`;
+    : `This is a deterministic Sandpaper PromptPack for a ${issueTypeLabels[input.issueType].toLowerCase()}.`;
 
   const prompt = `# ${normalized.title}
 

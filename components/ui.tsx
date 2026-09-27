@@ -13,7 +13,7 @@ export function PageHeader({
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-sky-300">
-          ShipGuard Engine
+          Sandpaper Engine
         </p>
         <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
           {title}

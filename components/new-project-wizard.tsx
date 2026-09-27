@@ -678,7 +678,7 @@ function createPromptInputs(result: ScanResult, manifestFiles: string[]): Prompt
     "Inspect the listed files or paths.",
     "Apply the smallest relevant fix in the target builder.",
     "Run build/typecheck if available.",
-    "Re-scan using AppFinisher after changes.",
+    "Re-scan using Sandpaper after changes.",
   ];
   const context =
     "This prompt was generated from user-provided file paths or manifest data, not from GitHub or uploaded source code.";

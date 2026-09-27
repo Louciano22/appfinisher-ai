@@ -2,7 +2,7 @@
 
 ## Product Promise
 
-AppFinisher AI is a launch-completion system for unfinished AI-built SaaS apps.
+Sandpaper is application completion and release readiness for AI-built software.
 It helps founders and AI-builder users identify launch blockers, prioritize fixes,
 and generate builder-ready prompts for tools like Cursor, Lovable, Claude Code,
 Replit, Bolt, and Windsurf.
@@ -15,12 +15,12 @@ and verify progress.
 
 - Public landing page with pricing-ready UI.
 - Mock dashboard backed by deterministic project and scan data.
-- ShipGuard Engine v1 scans a deterministic mock `FileTree` and local user-provided file manifests.
+- Sandpaper Engine v1 scans a deterministic mock `FileTree` and local user-provided file manifests.
 - Bug Finder and Duplicate Finder use curated mock findings.
 - New Project supports manual setup, pasted file trees, and manifest JSON for path-level scan previews.
 - PromptPack generates prompts from structured data and templates only, including all findings from a local project scan.
 - Launch Plan converts mock or local scan data into a guarded roadmap.
-- Launch OS is the premium command-center vision for AppFinisher AI, where readiness, fixes, prompts, risk analysis, and final launch verification come together in one place.
+- Launch OS is the premium command-center vision for Sandpaper, where readiness, fixes, prompts, risk analysis, and final launch verification come together in one place.
 - Reports generate copyable/downloadable markdown from mock scan data.
 
 ## Current Check Areas

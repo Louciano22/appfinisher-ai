@@ -73,9 +73,9 @@ export function LandingPage() {
       <nav className="flex items-center justify-between rounded-2xl border border-white/10 bg-zinc-950/70 px-4 py-3 backdrop-blur">
         <Link href="/" className="flex items-center gap-3">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-sky-300/30 bg-blue-500/15 font-mono text-sm font-semibold text-sky-100">
-            AF
+            SP
           </span>
-          <span className="font-semibold text-white">AppFinisher AI</span>
+          <span className="font-semibold text-white">Sandpaper</span>
         </Link>
         <div className="flex items-center gap-2">
           <Link
@@ -96,13 +96,13 @@ export function LandingPage() {
       <section className="grid gap-8 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <div>
           <p className="mb-4 inline-flex rounded-full border border-sky-300/25 bg-blue-500/10 px-3 py-1 text-xs font-medium text-sky-100">
-            Deterministic ShipGuard Engine demo
+            Deterministic Sandpaper Engine demo
           </p>
           <h1 className="max-w-5xl text-5xl font-semibold tracking-tight text-white sm:text-7xl">
-            Finish your AI-built app without guessing what is broken.
+            AI built it. Sandpaper proves it&apos;s ready.
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-8 text-zinc-400 sm:text-lg">
-            AppFinisher AI is a launch-completion system for unfinished AI-built SaaS apps.
+            Sandpaper is application completion and release readiness for AI-built software.
             It helps founders and AI-builder users identify detected risks, prioritize
             recommended fixes, and generate builder-ready prompts for Cursor, Lovable,
             Claude Code, Replit, Bolt, Windsurf, and more.
@@ -150,7 +150,7 @@ export function LandingPage() {
         </div>
       </LandingSection>
 
-      <LandingSection eyebrow="Solution" title="AppFinisher gives you a launch-completion workflow.">
+      <LandingSection eyebrow="Solution" title="Sandpaper gives you a launch-completion workflow.">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {solutions.map((item) => (
             <Pill key={item} text={item} tone="blue" />
@@ -220,10 +220,10 @@ export function LandingPage() {
         </div>
       </LandingSection>
 
-      <LandingSection eyebrow="Trust" title="AppFinisher helps reduce launch risk without overstating certainty.">
+      <LandingSection eyebrow="Trust" title="Sandpaper helps reduce launch risk without overstating certainty.">
         <Card>
           <p className="text-base leading-7 text-zinc-300">
-            AppFinisher is currently a deterministic demo product, not a live production scanner.
+            Sandpaper is currently a deterministic demo product, not a live production scanner.
             It proves the workflow: scan, diagnose, generate fix prompts, apply fixes,
             re-scan, and verify progress before production review.
           </p>

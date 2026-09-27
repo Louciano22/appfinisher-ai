@@ -28,7 +28,7 @@ export const mockPromptPackInputs: PromptPackInput[] = [
       "Run build/typecheck if available.",
     ],
     recommendedContext:
-      "AppFinisher detected a billing launch blocker in an AI-built SaaS app. The fix should be narrow and production-readiness oriented.",
+      "Sandpaper detected a billing launch blocker in an AI-built SaaS app. The fix should be narrow and production-readiness oriented.",
   },
   {
     id: "duplicate-supabase-client-cleanup",
@@ -62,7 +62,7 @@ export const mockPromptPackInputs: PromptPackInput[] = [
       "Run build/typecheck after consolidation.",
     ],
     recommendedContext:
-      "AppFinisher found duplicate Supabase clients that can create RLS and session drift in generated apps.",
+      "Sandpaper found duplicate Supabase clients that can create RLS and session drift in generated apps.",
   },
   {
     id: "ai-route-rate-limit",
@@ -91,7 +91,7 @@ export const mockPromptPackInputs: PromptPackInput[] = [
       "Run build/typecheck if available.",
     ],
     recommendedContext:
-      "AppFinisher identified an AI cost-control risk. The prompt should keep implementation narrow and deterministic.",
+      "Sandpaper identified an AI cost-control risk. The prompt should keep implementation narrow and deterministic.",
   },
   {
     id: "missing-password-reset-flow",
@@ -120,7 +120,7 @@ export const mockPromptPackInputs: PromptPackInput[] = [
       "Click through login to reset route in the app preview.",
     ],
     recommendedContext:
-      "AppFinisher found an auth-readiness gap that affects customer recovery during launch.",
+      "Sandpaper found an auth-readiness gap that affects customer recovery during launch.",
   },
   {
     id: "supabase-rls-onboarding-issue",
@@ -149,6 +149,6 @@ export const mockPromptPackInputs: PromptPackInput[] = [
       "Run build/typecheck and summarize changed files.",
     ],
     recommendedContext:
-      "AppFinisher detected a database launch-readiness risk around onboarding data ownership.",
+      "Sandpaper detected a database launch-readiness risk around onboarding data ownership.",
   },
 ];
