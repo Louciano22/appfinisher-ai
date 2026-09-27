@@ -5,12 +5,15 @@ import { useMemo, useState } from "react";
 import { SeverityBadge, StatusBadge } from "@/components/status-badge";
 import { Card, MetricCard, PageHeader, SectionTitle } from "@/components/ui";
 import {
+  compareEvidenceScans,
   detectStackFromManifest,
   generateLaunchPlanFromScanResult,
   parseManifestJson,
   parsePastedFileTree,
   scanFileManifest,
   type DetectedStack,
+  type EvidenceGateStatus,
+  type EvidenceComparison,
   type FileManifest,
   type ScanResult,
 } from "@/lib/shipguard-engine";
@@ -80,6 +83,7 @@ const sampleManifest = {
   envExample: "NEXT_PUBLIC_SUPABASE_URL= STRIPE_SECRET_KEY= OPENAI_API_KEY=",
   frameworkHints: ["Next.js App Router"],
   routeList: ["app/api/ai/chat/route.ts", "app/api/stripe/webhooks/route.ts"],
+  coverage: { paths: "partial", contentPreviews: "selected" },
 };
 
 export function NewProjectWizard() {
@@ -97,6 +101,9 @@ export function NewProjectWizard() {
   const [treeText, setTreeText] = useState(sampleTree);
   const [manifestText, setManifestText] = useState(JSON.stringify(sampleManifest, null, 2));
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
+  const [comparison, setComparison] = useState<EvidenceComparison | null>(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanError, setScanError] = useState<string | null>(null);
   const [prompts, setPrompts] = useState<PromptPackOutput[]>([]);
 
   const parseResult = useMemo(() => {
@@ -116,21 +123,34 @@ export function NewProjectWizard() {
     [details.name, scanResult],
   );
 
-  function runScan() {
-    const result = scanFileManifest(parseResult.manifest, {
-      projectId: slugify(details.name),
-      name: details.name,
-      stack: [details.framework, details.database, details.billingProvider],
-      framework: detectedStack.framework ?? details.framework,
-      database: detectedStack.database ?? details.database,
-      billingProvider: detectedStack.billingProvider ?? details.billingProvider,
-      deploymentProvider: detectedStack.deploymentProvider ?? details.deploymentProvider,
-      aiProvider: detectedStack.aiProvider ?? details.aiProvider,
-    });
+  async function runScan() {
+    setIsScanning(true);
+    setScanError(null);
+    try {
+      const result = await scanFileManifest(parseResult.manifest, {
+        projectId: slugify(details.name),
+        name: details.name,
+        stack: [details.framework, details.database, details.billingProvider],
+        framework: detectedStack.framework ?? details.framework,
+        database: detectedStack.database ?? details.database,
+        billingProvider: detectedStack.billingProvider ?? details.billingProvider,
+        deploymentProvider: detectedStack.deploymentProvider ?? details.deploymentProvider,
+        aiProvider: detectedStack.aiProvider ?? details.aiProvider,
+      });
 
-    setScanResult(result);
-    setPrompts([]);
-    setStep(5);
+      setComparison(
+        scanResult?.evidence && result.evidence
+          ? compareEvidenceScans(scanResult.evidence, result.evidence)
+          : null,
+      );
+      setScanResult(result);
+      setPrompts([]);
+      setStep(5);
+    } catch (error) {
+      setScanError(error instanceof Error ? error.message : "The local evidence scan failed.");
+    } finally {
+      setIsScanning(false);
+    }
   }
 
   function generateAllPrompts() {
@@ -152,6 +172,12 @@ export function NewProjectWizard() {
 
       <StepNav step={step} setStep={setStep} />
 
+      {scanError ? (
+        <p className="rounded-xl border border-red-400/20 bg-red-400/10 p-4 text-sm text-red-100">
+          {scanError}
+        </p>
+      ) : null}
+
       {step === 1 ? <ProjectDetails details={details} setDetails={setDetails} /> : null}
       {step === 2 ? <InputMethodPicker method={method} setMethod={setMethod} /> : null}
       {step === 3 ? (
@@ -170,6 +196,7 @@ export function NewProjectWizard() {
           errors={parseResult.errors}
           detectedStack={detectedStack}
           onRunScan={runScan}
+          isScanning={isScanning}
         />
       ) : null}
       {step === 5 && scanResult ? (
@@ -177,6 +204,7 @@ export function NewProjectWizard() {
           result={scanResult}
           detectedStack={detectedStack}
           launchPlan={launchPlan}
+          comparison={comparison}
           prompts={prompts}
           onGeneratePrompts={generateAllPrompts}
         />
@@ -212,9 +240,10 @@ export function NewProjectWizard() {
           <button
             type="button"
             onClick={runScan}
+            disabled={isScanning}
             className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-500"
           >
-            Re-run Local Scan
+            {isScanning ? "Scanning..." : "Re-run Local Scan"}
           </button>
         )}
       </div>
@@ -406,11 +435,13 @@ function ReviewStack({
   errors,
   detectedStack,
   onRunScan,
+  isScanning,
 }: {
   manifest: FileManifest;
   errors: string[];
   detectedStack: DetectedStack;
-  onRunScan: () => void;
+  onRunScan: () => void | Promise<void>;
+  isScanning: boolean;
 }) {
   return (
     <div className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
@@ -426,10 +457,10 @@ function ReviewStack({
         <button
           type="button"
           onClick={onRunScan}
-          disabled={errors.length > 0 || manifest.files.length === 0}
+          disabled={isScanning || errors.length > 0 || manifest.files.length === 0}
           className="mt-5 w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-40"
         >
-          Run Path-Level Scan
+          {isScanning ? "Scanning..." : "Run Path-Level Scan"}
         </button>
       </Card>
       <Card>
@@ -467,12 +498,14 @@ function ScanSummary({
   result,
   detectedStack,
   launchPlan,
+  comparison,
   prompts,
   onGeneratePrompts,
 }: {
   result: ScanResult;
   detectedStack: DetectedStack;
   launchPlan: LaunchPlan | null;
+  comparison: EvidenceComparison | null;
   prompts: PromptPackOutput[];
   onGeneratePrompts: () => void;
 }) {
@@ -516,6 +549,9 @@ function ScanSummary({
           </Link>
         </div>
       </Card>
+      {result.evidence ? (
+        <ManifestCheckReceipt evidence={result.evidence} comparison={comparison} />
+      ) : null}
       <Card>
         <SectionTitle title="Launch plan from pasted paths" subtitle="Generated from this local scan result with the same score guardrails used by the full Launch Plan page." />
         <div className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr]">
@@ -575,6 +611,95 @@ function ScanSummary({
       ) : null}
     </div>
   );
+}
+
+function ManifestCheckReceipt({
+  evidence,
+  comparison,
+}: {
+  evidence: NonNullable<ScanResult["evidence"]>;
+  comparison: EvidenceComparison | null;
+}) {
+  return (
+    <Card>
+      <SectionTitle
+        title="Manifest check receipt"
+        subtitle={`Heuristic checks over user-supplied data. Paths: ${evidence.coverage.paths}; content previews: ${evidence.coverage.contentPreviews}.`}
+      />
+      <div className="grid gap-3 md:grid-cols-2">
+        {evidence.gates.map((gate) => (
+          <div key={gate.gateId} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="font-medium text-white">{gate.title}</p>
+                <p className="mt-1 font-mono text-[11px] text-zinc-600">{gate.gateId}</p>
+              </div>
+              <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${evidenceStatusClass(gate.status)}`}>
+                {evidenceStatusLabel(gate.status)}
+              </span>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-zinc-400">{gate.explanation}</p>
+            {gate.evidence.length > 0 ? (
+              <ul className="mt-3 space-y-1">
+                {gate.evidence.map((item, index) => (
+                  <li key={`${gate.gateId}-${item.path ?? item.field ?? index}`} className="text-xs leading-5 text-zinc-500">
+                    <span className="font-mono text-zinc-400">{item.path ?? item.field ?? item.kind}</span>
+                    {" — "}
+                    {item.assertion}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 rounded-xl border border-white/10 bg-black/20 p-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm font-medium text-white">
+            {evidence.summary.supportedManifestChecksPass
+              ? "All supported manifest checks pass."
+              : "Some supported manifest checks failed or remain unknown."}
+          </p>
+          <p className="font-mono text-xs text-zinc-500">Receipt {evidence.inputFingerprint.slice(0, 12)}</p>
+        </div>
+        <p className="mt-2 text-xs leading-5 text-zinc-500">
+          This receipt records deterministic manifest observations and does not report runtime behavior. User-declared completeness is not trusted, and unknown checks are never passes.
+        </p>
+      </div>
+      {comparison ? (
+        <div className="mt-4 rounded-xl border border-sky-300/20 bg-blue-500/10 p-4">
+          <p className="font-medium text-sky-100">Declared re-scan changes</p>
+          <p className="mt-2 text-sm leading-6 text-sky-100/80">
+            {comparison.declaredFixedGateIds.length} declared fixed, {comparison.declaredRegressionGateIds.length} declared regressions, {comparison.unassessableGateIds.length} unassessable.
+          </p>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            {comparison.transitions.map((item) => (
+              <div key={item.gateId} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-xs text-zinc-300">
+                <span className="font-medium text-white">{item.title}</span>
+                <span className="ml-2 font-mono text-sky-200">{item.transition.replaceAll("_", " ")}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <p className="mt-4 rounded-xl border border-white/10 bg-white/[0.02] p-4 text-sm leading-6 text-zinc-500">
+          This is the in-memory baseline. Edit the manifest or file tree, then re-run the local scan to compare declared observations.
+        </p>
+      )}
+    </Card>
+  );
+}
+
+function evidenceStatusLabel(status: EvidenceGateStatus): string {
+  if (status === "not_applicable") return "Not applicable";
+  return status.charAt(0).toUpperCase() + status.slice(1);
+}
+
+function evidenceStatusClass(status: EvidenceGateStatus): string {
+  if (status === "pass") return "bg-emerald-400/15 text-emerald-200";
+  if (status === "fail") return "bg-red-400/15 text-red-200";
+  if (status === "unknown") return "bg-amber-400/15 text-amber-100";
+  return "bg-white/10 text-zinc-300";
 }
 
 function TextField({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
@@ -665,6 +790,7 @@ function buildManualManifest(details: {
     files,
     packageJson: { scripts: { build: "next build", lint: "eslint" } },
     envExample: "NEXT_PUBLIC_APP_URL= SUPABASE_URL= STRIPE_SECRET_KEY= OPENAI_API_KEY=",
+    coverage: { paths: "partial", contentPreviews: "none" },
   };
 }
 
