@@ -125,7 +125,7 @@ function categoryFromEngineScore(result: ScanResult, score: ScanResult["category
 }
 
 export function generateLaunchPlanFromScanResult(appName: string, result: ScanResult): LaunchPlan {
-  return generateLaunchPlan({
+  const plan = generateLaunchPlan({
     appName,
     scan: scanFromResult(result),
     issues: result.issues.map((issue) => issueFromEngineIssue(result, issue)),
@@ -133,4 +133,29 @@ export function generateLaunchPlanFromScanResult(appName: string, result: ScanRe
     duplicateGroups: result.duplicateGroups.map((group) => duplicateFromEngineGroup(result, group)),
     categoryScores: result.categoryScores.map((category) => categoryFromEngineScore(result, category)),
   });
+
+  if (!result.evidence || result.evidence.summary.supportedManifestChecksPass) return plan;
+
+  const hasCriticalEvidenceFailure = result.evidence.gates.some(
+    (gate) => gate.includedInSupportedCheckSummary && gate.severity === "critical" && gate.status === "fail",
+  );
+  const maximumScore = hasCriticalEvidenceFailure ? 79 : 89;
+  const launchScore = Math.min(plan.launchScore, maximumScore);
+
+  return {
+    ...plan,
+    launchScore,
+    launchStatus:
+      launchScore < 60
+        ? "Not Ready"
+        : launchScore < 80
+          ? "Needs Work"
+          : launchScore < 90
+            ? "Almost Ready"
+            : "Launch Ready",
+    consistencyNotes: [
+      ...plan.consistencyNotes,
+      "The manifest check receipt contains failed or unknown checks; unknown checks are not counted as passes.",
+    ],
+  };
 }

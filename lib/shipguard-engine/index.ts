@@ -8,3 +8,6 @@ export * from "@/lib/shipguard-engine/manifest";
 export * from "@/lib/shipguard-engine/launch-plan-adapter";
 export * from "@/lib/shipguard-engine/bug-fix-prompts";
 export * from "@/lib/shipguard-engine/duplicate-resolution-prompts";
+export * from "@/lib/shipguard-engine/evidence-types";
+export * from "@/lib/shipguard-engine/evidence";
+export * from "@/lib/shipguard-engine/verification";

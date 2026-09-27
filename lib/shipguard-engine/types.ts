@@ -5,6 +5,7 @@ import type {
   IssueSeverity,
   LaunchCategoryStatus,
 } from "@/lib/types";
+import type { EvidenceScan, ManifestCoverage } from "@/lib/shipguard-engine/evidence-types";
 
 export type FileTree = {
   path: string;
@@ -35,6 +36,7 @@ export type FileManifest = {
   envExample?: string;
   frameworkHints?: string[];
   routeList?: string[];
+  coverage?: ManifestCoverage;
 };
 
 export type DetectedStack = {
@@ -178,4 +180,5 @@ export type ScanResult = {
   criticalBlockers: EngineIssue[];
   recommendedNextFixes: string[];
   createdAt: string;
+  evidence?: EvidenceScan;
 };
